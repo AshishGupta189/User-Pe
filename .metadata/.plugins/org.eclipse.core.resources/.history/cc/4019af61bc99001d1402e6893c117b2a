@@ -1,0 +1,11 @@
+package com.vcriate.Service.Login;
+
+import com.vcriate.Dto.LoginDTO;
+import com.vcriate.Exception.LoginException;
+
+public interface LoginService {
+	
+	 public String login(LoginDTO ldto)throws LoginException;
+
+	
+}

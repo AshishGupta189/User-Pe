@@ -1,0 +1,102 @@
+package com.vcriate.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.transaction.Transaction;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vcriate.Entity.Transactions;
+import com.vcriate.Entity.Type;
+import com.vcriate.Entity.User;
+import com.vcriate.Entity.UserSession;
+import com.vcriate.Exception.LoginException;
+import com.vcriate.Exception.UserException;
+import com.vcriate.Repository.TransactionsDao;
+import com.vcriate.Repository.UserDao;
+import com.vcriate.Repository.UserSessionDao;
+
+public class UserServiceImpl implements UserService{
+
+	@Autowired
+	private UserDao uDao;
+	@Autowired
+	private TransactionsDao tDao;
+	@Autowired
+	private UserSessionDao usDao;
+	@Override
+	public String viewBalance(String sessionId) throws UserException, LoginException {
+		UserSession us=usDao.findBySessionId(sessionId);
+		if(us==null) {
+			throw new LoginException("Please LogIn first");
+		}
+		User user=uDao.findByMobile(us.getMobile());
+		if(user==null) {
+			throw new UserException("User not found with this mobile");
+		}
+		return user.getAmount()+"";
+	}
+	@Override
+	public String depositAmount(String sessionId,Integer amount) throws UserException, LoginException {
+		UserSession us=usDao.findBySessionId(sessionId);
+		if(us==null) {
+			throw new LoginException("Please LogIn first");
+		}
+		Transactions tr=new Transactions();
+		tr.setAmount(amount);
+		tr.setApproval(false);
+		tr.setTime(LocalDateTime.now());
+		tr.setType(Type.Deposit);
+		tr.setMobile(us.getMobile());
+		User user=uDao.findByMobile(us.getMobile());
+		if(user==null) {
+			throw new UserException("User not found with this mobile");
+		}
+		user.setAmount(user.getAmount()+amount);
+		tr.setApproval(true);
+		return "Amount deposited successfully";
+	}
+	@Override
+	public String withdrawAmount(String sessionId,Integer amount) throws UserException, LoginException {
+		UserSession us=usDao.findBySessionId(sessionId);
+		if(us==null) {
+			throw new LoginException("Please LogIn first");
+		}
+		Transactions tr=new Transactions();
+		tr.setAmount(amount);
+		tr.setApproval(false);
+		tr.setTime(LocalDateTime.now());
+		tr.setType(Type.Withdraw);
+		tr.setMobile(us.getMobile());
+		User user=uDao.findByMobile(us.getMobile());
+		if(user==null) {
+			throw new UserException("User not found with this mobile");
+		}
+		if(user.getAmount()>=amount) {
+			user.setAmount(user.getAmount()-amount);
+			tr.setApproval(true);
+			return "Amount withdrawn successfully";
+		}
+		throw new UserException("Insufficient funds");
+	}
+	@Override
+	public List<Transactions> viewTransactions(String sessionId) throws UserException, LoginException {
+		UserSession us=usDao.findBySessionId(sessionId);
+		if(us==null) {
+			throw new LoginException("Please LogIn first");
+		}
+		User user=uDao.findByMobile(us.getMobile());
+		if(user==null) {
+			throw new UserException("User not found with this mobile");
+		}
+		List<Transactions> tr=tDao.findByMobile(us.getMobile());
+		if(tr.size()==0) {
+			throw new UserException("No transactions for this user"); 
+		}
+		return tr;
+		
+	}
+
+
+}

@@ -1,0 +1,5 @@
+package com.vcriate.Repository;
+
+public class UserSessionDao {
+
+}

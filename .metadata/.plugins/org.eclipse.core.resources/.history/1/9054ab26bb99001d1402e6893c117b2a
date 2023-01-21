@@ -1,0 +1,11 @@
+package com.vcriate.Repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.vcriate.Entity.Transactions;
+
+public interface TransactionsDao extends JpaRepository<Transactions, Integer> {
+	public List<Transactions> findByMobile(String phone);
+}

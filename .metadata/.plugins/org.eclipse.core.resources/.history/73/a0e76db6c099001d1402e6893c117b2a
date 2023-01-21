@@ -1,0 +1,35 @@
+package com.vcriate.Controller;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.vcriate.Dto.LoginDTO;
+import com.vcriate.Exception.LoginException;
+import com.vcriate.Service.Login.LoginService;
+
+@RestController
+public class UserController {
+
+	@Autowired
+	private LoginService logS;
+	
+	@PostMapping("/login")
+	public ResponseEntity<String> logInAdminHandler(@Valid @RequestBody LoginDTO dto) throws LoginException {
+		String result = logS.login(dto);
+		return new ResponseEntity<String>(result,HttpStatus.OK );
+	}
+	
+	@PostMapping("/logout")
+	public String logoutAdminHandler(@Valid @RequestParam(required = false) String sessionid) throws LoginException {
+		return logS.logOut(sessionid);
+	}
+	
+	
+}

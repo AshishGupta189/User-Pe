@@ -1,0 +1,57 @@
+package com.vcriate.Service.Login;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.vcriate.Dto.LoginDTO;
+import com.vcriate.Entity.User;
+import com.vcriate.Entity.UserSession;
+import com.vcriate.Exception.LoginException;
+import com.vcriate.Repository.UserDao;
+import com.vcriate.Repository.UserSessionDao;
+
+	
+	@Service
+	public class LoginServiceImpl implements LoginService{
+
+		@Autowired
+		 private UserDao udao;
+		@Autowired
+		 private UserSessionDao usersession;
+
+		 @Override
+		 public String login(LoginDTO dto) throws LoginException {
+			
+				
+		 		Optional<User> user = udao.findById(dto.getMobile());
+		 		if(user.get() == null) {
+		 			throw new LoginException("Please Enter a valid mobile number");
+		 		}
+				
+		 	    if(user.get().getPassword().equals(dto.getPassword())) {
+					return "Login Successfull";
+		 	    }
+		 	    else
+		 			throw new LoginException("Please Enter a valid password");
+			 
+				
+		 }
+
+		 @Override
+		 public String logOut(String key)throws LoginException {
+		 	UserSession us =  usersession.findBySessionId(key);
+		 	if(us != null) {
+		 		usersession.delete(us);
+		 		return "Logged Out!";
+		 	}else throw new LoginException("Error Occured Unable to log out !");
+			
+		 }
+
+
+	}
+
+		
+
+

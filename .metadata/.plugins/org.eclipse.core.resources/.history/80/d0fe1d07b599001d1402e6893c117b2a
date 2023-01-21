@@ -1,0 +1,5 @@
+package com.vcriate.Exception;
+
+public class UserException {
+
+}

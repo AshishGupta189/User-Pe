@@ -1,0 +1,66 @@
+package com.vcriate.Service.Login;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.vcriate.Dto.LoginDTO;
+import com.vcriate.Entity.User;
+import com.vcriate.Entity.UserSession;
+import com.vcriate.Exception.LoginException;
+import com.vcriate.Repository.UserDao;
+import com.vcriate.Repository.UserSessionDao;
+
+import net.bytebuddy.utility.RandomString;
+
+	
+	@Service
+	public class LoginServiceImpl implements LoginService{
+
+		@Autowired
+		 private UserDao udao;
+		@Autowired
+		 private UserSessionDao usersession;
+
+		 @Override
+		 public String login(LoginDTO dto) throws LoginException {
+			
+				
+		 		Optional<User> user = udao.findById(dto.getMobile());
+		 		if(user.isEmpty()) {
+		 			throw new LoginException("Please Enter a valid mobile number");
+		 		}
+				
+		 	    if(user.get().getPassword().equals(dto.getPassword())) {
+		 	    	UserSession uss=new UserSession();
+		 	    	uss.setMobile(user.get().getMobile());
+		 	    	uss.setSessionId(RandomString.make(6));
+		 	    	uss.setSessionTime(LocalDateTime.now());
+		 	    	
+					return "Login Successfull"+ "sessionid :" +uss.getSessionId();
+		 	    }
+		 	    else
+		 			throw new LoginException("Please Enter a valid password");
+			 
+				
+		 }
+
+		 @Override
+		 public String logOut(String key)throws LoginException {
+		 	UserSession us =  usersession.findBySessionId(key);
+		 	if(us != null) {
+		 		usersession.delete(us);
+		 		return "Logged Out!";
+		 	}else throw new LoginException("Error Occured Unable to log out !");
+			
+		 }
+
+
+	}
+
+		
+
+

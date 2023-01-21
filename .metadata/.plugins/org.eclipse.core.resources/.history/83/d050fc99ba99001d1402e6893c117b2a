@@ -1,0 +1,6 @@
+package com.vcriate.Service;
+
+public interface UserService {
+	public String viewBalance(String sessionId,String mobile);
+	
+}

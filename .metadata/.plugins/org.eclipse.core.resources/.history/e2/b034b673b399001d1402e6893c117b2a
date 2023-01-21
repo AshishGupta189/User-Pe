@@ -1,0 +1,5 @@
+package com.vcriate.Entity;
+
+public class User {
+
+}

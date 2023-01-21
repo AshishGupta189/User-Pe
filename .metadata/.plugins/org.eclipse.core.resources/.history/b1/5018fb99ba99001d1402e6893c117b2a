@@ -1,0 +1,9 @@
+package com.vcriate.Repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.vcriate.Entity.Transactions;
+
+public interface TransactionsDao extends JpaRepository<Transactions, Integer> {
+
+}
