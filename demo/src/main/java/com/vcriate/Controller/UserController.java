@@ -18,8 +18,8 @@ import com.vcriate.Dto.LoginDTO;
 import com.vcriate.Entity.Transactions;
 import com.vcriate.Entity.User;
 import com.vcriate.Exception.LoginException;
+import com.vcriate.Service.LoginService;
 import com.vcriate.Service.UserService;
-import com.vcriate.Service.Login.LoginService;
 
 @RestController
 public class UserController {
