@@ -1,6 +1,6 @@
 # User-Pe
 -------------------------------------------------------------------------
-It's a java based application for user to perform transactions like Phone-pe
+It's a java application for user to perform transactions like Phone-pe.
 
 # Users can perform the following functionalities :
 -------------------------------------------------
