@@ -2,6 +2,7 @@
 -------------------------------------------------------------------------
 It's a java application for user to perform transactions like Phone-pe.
 
+
 # Users can perform the following functionalities :
 -------------------------------------------------
 * Users can register themselves
